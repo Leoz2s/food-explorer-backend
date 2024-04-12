@@ -1,0 +1,15 @@
+{
+  "name": "backend-food-explorer",
+  "version": "1.0.0",
+  "description": "API of Food Explorer application.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/server.js"
+  },
+  "keywords": [],
+  "author": "Leonardo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
