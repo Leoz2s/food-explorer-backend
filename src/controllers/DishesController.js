@@ -1,9 +1,10 @@
+const AppError = require("../utils/AppError");
 const knex = require("../database/knex");
 
 class DishesController {
   async create(request, response) {
     const {image, name, category, ingredients, price, description} = request.body;
-    const {user_id} = request.params;
+    const user_id = request.user.id;
 
     const [dish_id] = await knex("dishes").insert({
       user_id, image, name, category, price, description
@@ -29,8 +30,9 @@ class DishesController {
 
   async delete(request, response) {
     const {id} = request.params;
+    const user_id = request.user.id;
 
-    await knex("dishes").where({id}).delete();
+    await knex("dishes").where({id, user_id}).delete();
 
     return response.json();
   };
@@ -68,25 +70,23 @@ class DishesController {
   };
 
   async update(request, response) {
-    const {image, name, category, ingredients, price, description} = request.body;
+    let {image, name, category, price, description, ingredients} = request.body;
     const {id} = request.params;
-    const {user_id} = request.query;
+    const user_id = request.user.id;
 
-    const dish = await knex("dishes").where({id});
-    const dishIngredients = await knex("ingredients").where({dish_id: id});
+    const dish = await knex("dishes").where({id, user_id});
 
-    if(!dish) {
+    if(!dish[0]) {
       throw new AppError("Prato não encontrado.");
     };
-    dish.image = image ?? dish.image;
-    dish.name = name ?? dish.name;
-    dish.category = category ?? dish.category;
-    dish.price = price ?? dish.price;
-    dish.description = description ?? dish.description;
-    console.log(dish)
-    await knex("dishes").where({id}).update({
-      image, name, category, price, description
-    });
+    image = image ?? dish[0].image;
+    name = name ?? dish[0].name;
+    category = category ?? dish[0].category;
+    price = price ?? dish[0].price;
+    description = description ?? dish[0].description;
+    await knex("dishes").where({id, user_id}).update({image, name, category, price, description});
+    
+    const dishIngredients = await knex("ingredients").where({dish_id: id});
 
     if(dishIngredients) {
       await knex("ingredients").where({dish_id: id}).delete();
