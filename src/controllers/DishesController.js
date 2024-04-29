@@ -70,7 +70,7 @@ class DishesController {
   };
 
   async update(request, response) {
-    let {image, name, category, price, description, ingredients} = request.body;
+    let {name, category, price, description, ingredients} = request.body;
     const {id} = request.params;
     const user_id = request.user.id;
 
@@ -79,12 +79,11 @@ class DishesController {
     if(!dish[0]) {
       throw new AppError("Prato não encontrado.");
     };
-    image = image ?? dish[0].image;
     name = name ?? dish[0].name;
     category = category ?? dish[0].category;
     price = price ?? dish[0].price;
     description = description ?? dish[0].description;
-    await knex("dishes").where({id, user_id}).update({image, name, category, price, description});
+    await knex("dishes").update({name, category, price, description}).where({id, user_id});
     
     const dishIngredients = await knex("ingredients").where({dish_id: id});
 
