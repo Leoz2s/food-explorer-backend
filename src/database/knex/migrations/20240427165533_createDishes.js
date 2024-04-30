@@ -3,7 +3,8 @@ exports.up = knex => knex.schema.createTable("dishes", table => {
   table.integer("user_id").references("id").inTable("users").onDelete("CASCADE");
   table.text("image");
   table.text("name");
-  table.text("category");
+  table.enum("category", ["Refeição", "Sobremesa", "Bebida"], {useNative: true, enumName: "categories"})
+    .notNullable().default("Refeição");
   table.text("price");
   table.text("description");
 });

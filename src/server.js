@@ -4,15 +4,15 @@ const AppError = require("./utils/AppError");
 const express = require('express');
 const app = express();
 
-const routes = require("./routes");
-
-const uploadConfig = require("./configs/upload");
-
-const migrationsRun = require("./database/sqlite/migrations");
-migrationsRun();
+const cors = require("cors");
+app.use(cors());
 
 app.use(express.json());
+
+const routes = require("./routes");
 app.use(routes);
+
+const uploadConfig = require("./configs/upload");
 app.use("/files", express.static(uploadConfig.UPLOADS_FOLDER));
 
 app.use((error, request, response, next) => {
@@ -22,7 +22,6 @@ app.use((error, request, response, next) => {
       message: error.message,
     });
   };
-
   console.error(error);
 
   return response.status(500).json({
