@@ -24,8 +24,15 @@ class SessionsController {
       subject: String(user.id),
       expiresIn
     });
+    response.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "Strict",
+      secure: true,
+      maxAge: 15 * 60 * 1000
+    });
 
-    return response.status(201).json({user, token});
+    delete user.password;
+    return response.status(201).json({user});
   };
 };
 

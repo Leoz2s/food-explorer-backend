@@ -49,6 +49,7 @@ class DishesController {
         .whereLike("dishes.name", `%${name}%`)
         .whereIn("ingredients.name", filterIngredients)
         .innerJoin("dishes", "dishes.id", "ingredients.dish_id")
+        .groupBy("dishes.id")
         .orderBy("dishes.name");
         
     } else {
@@ -91,7 +92,12 @@ class DishesController {
       await knex("ingredients").where({dish_id: id}).delete();
     };
     const insertIngredients = ingredients.map(ingredient => {
-      const lowerCaseIngredient = ingredient.toLowerCase();
+      let lowerCaseIngredient
+      if(ingredient.name) {
+        lowerCaseIngredient = ingredient.name.toLowerCase();
+      }else {
+        lowerCaseIngredient = ingredient.toLowerCase();
+      }
       return {dish_id: id, user_id, name: lowerCaseIngredient};
     });
     await knex("ingredients").insert(insertIngredients);

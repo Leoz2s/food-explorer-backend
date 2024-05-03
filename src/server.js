@@ -3,11 +3,16 @@ const AppError = require("./utils/AppError");
 
 const express = require('express');
 const app = express();
+app.use(express.json());
+
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 const cors = require("cors");
-app.use(cors());
-
-app.use(express.json());
+app.use(cors({
+  origin: ["http://localhost:5173", "http://127.0.0.1:5173", ],
+  credentials: true,
+}));
 
 const routes = require("./routes");
 app.use(routes);
