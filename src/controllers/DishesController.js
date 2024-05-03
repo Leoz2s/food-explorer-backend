@@ -1,5 +1,6 @@
 const AppError = require("../utils/AppError");
 const knex = require("../database/knex");
+const DiskStorage = require("../providers/DiskStorage");
 
 class DishesController {
   async create(request, response) {
@@ -32,7 +33,17 @@ class DishesController {
     const {id} = request.params;
     const user_id = request.user.id;
 
+    const dish = await knex("dishes").where({id, user_id}).first();
+    if(!dish) {
+      throw new AppError("O prato a ser deletado não existe.", 400);
+    };
+
     await knex("dishes").where({id, user_id}).delete();
+
+    if(dish.image) {
+      const diskStorage = new DiskStorage;
+      await diskStorage.deleteFile(dish.image);
+    };
 
     return response.json();
   };
