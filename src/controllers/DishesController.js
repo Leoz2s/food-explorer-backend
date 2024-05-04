@@ -4,20 +4,22 @@ const DiskStorage = require("../providers/DiskStorage");
 
 class DishesController {
   async create(request, response) {
-    const {image, name, category, ingredients, price, description} = request.body;
+    const {name, category, ingredients, price, description} = request.body;
     const user_id = request.user.id;
 
     const [dish_id] = await knex("dishes").insert({
-      user_id, image, name, category, price, description
+      user_id, name, category, price, description
     });
 
-    const ingredientsInsert = ingredients.map(ingredient => {
-      const lowerCaseIngredient = ingredient.toLowerCase();
-      return {dish_id, user_id, name: lowerCaseIngredient}
-    });
-    await knex("ingredients").insert(ingredientsInsert);
+    if(ingredients[0]) {
+      const ingredientsInsert = ingredients.map(ingredient => {
+        const lowerCaseIngredient = ingredient.toLowerCase();
+        return {dish_id, user_id, name: lowerCaseIngredient}
+      });
+      await knex("ingredients").insert(ingredientsInsert);
+    };
 
-    response.json();
+    response.json({dish_id});
   };
 
   async show(request, response) {
@@ -33,12 +35,12 @@ class DishesController {
     const {id} = request.params;
     const user_id = request.user.id;
 
-    const dish = await knex("dishes").where({id, user_id}).first();
+    const dish = await knex("dishes").where({id}).first();
     if(!dish) {
       throw new AppError("O prato a ser deletado não existe.", 400);
     };
 
-    await knex("dishes").where({id, user_id}).delete();
+    await knex("dishes").where({id}).delete();
 
     if(dish.image) {
       const diskStorage = new DiskStorage;
@@ -53,17 +55,32 @@ class DishesController {
 
     let dishes;
 
-    if(ingredients) {
+    if(ingredients === name) {
       const filterIngredients = ingredients.split(' ').map(ingredient => ingredient.trim().toLowerCase());
-      dishes = await knex("ingredients")
-        .select(["dishes.id", "dishes.name"])
-        .whereLike("dishes.name", `%${name}%`)
+      const dishesByIngredients = await knex("ingredients")
+        .select(["*"])
         .whereIn("ingredients.name", filterIngredients)
         .innerJoin("dishes", "dishes.id", "ingredients.dish_id")
         .groupBy("dishes.id")
         .orderBy("dishes.name");
+
+      const dishesByName = await knex("dishes")
+        .whereLike("name", `%${name}%`)
+        .orderBy("name");
+
+      dishes = Object.assign(dishesByIngredients, dishesByName);
+
+    }else if(ingredients) {
+      const filterIngredients = ingredients.split(' ').map(ingredient => ingredient.trim().toLowerCase());
+      dishes = await knex("ingredients")
+        .select(["*"])
+        .whereIn("ingredients.name", filterIngredients)
+        .innerJoin("dishes", "dishes.id", "ingredients.dish_id")
+        .whereLike("dishes.name", `%${name}%`)
+        .groupBy("dishes.id")
+        .orderBy("dishes.name");
         
-    } else {
+    }else {
       dishes = await knex("dishes")
         .whereLike("name", `%${name}%`)
         .orderBy("name");
@@ -86,7 +103,7 @@ class DishesController {
     const {id} = request.params;
     const user_id = request.user.id;
 
-    const dish = await knex("dishes").where({id, user_id});
+    const dish = await knex("dishes").where({id});
 
     if(!dish[0]) {
       throw new AppError("Prato não encontrado.");
@@ -95,7 +112,7 @@ class DishesController {
     category = category ?? dish[0].category;
     price = price ?? dish[0].price;
     description = description ?? dish[0].description;
-    await knex("dishes").update({name, category, price, description}).where({id, user_id});
+    await knex("dishes").update({name, category, price, description}).where({id});
     
     const dishIngredients = await knex("ingredients").where({dish_id: id});
 

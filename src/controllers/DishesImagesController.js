@@ -13,7 +13,7 @@ class DishesImagesController {
     const dish = await knex("dishes").where({id, user_id}).first();
 
     if(!dish) {
-      throw new AppError("Apenas usuários autenticados podem mudar imagens de pratos.", 401);
+      throw new AppError("O prato não existe.", 400);
     }else if(dish.image) {
       await diskStorage.deleteFile(dish.image);
     };
