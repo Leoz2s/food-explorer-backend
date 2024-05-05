@@ -5,7 +5,7 @@ const authConfig = require("../configs/auth");
 function ensureAuthenticated(request, response, next) {
   const authHeader = request.headers;
   if(!authHeader.cookie) {
-    throw new AppError("JWT token não informado.", 400);
+    throw new AppError("JWT token não informado.", 401);
   };
 
   const [, token] = authHeader.cookie.split("token=");
