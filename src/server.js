@@ -11,7 +11,7 @@ app.use(cookieParser());
 
 const cors = require("cors");
 app.use(cors({
-  origin: ["http://localhost:5173", "http://127.0.0.1:5173", "https://api-foodexplorer-6hcw.onrender.com"],
+  origin: ["http://localhost:5173", "http://127.0.0.1:5173", "https://food-explorer-frontend-leo.netlify.app"],
   credentials: true,
 }));
 
