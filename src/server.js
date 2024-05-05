@@ -9,15 +9,13 @@ app.use(express.json());
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
-app.use((request, response, next) => {
-  response.header('Access-Control-Allow-Credentials', 'true');
-  response.header('Access-Control-Allow-Origin', "http://localhost:5173");
-  response.header('Access-Control-Allow-Methods', 'GET,HEAD,PATCH,DELETE,POST,PUT');
-  response.header('Access-Control-Allow-Credentials', `X-CSRF-Token, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version,
-    Authorization, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method,
-    Access-Control-Request-Headers`);
-  next();
-});
+// app.use((request, response, next) => {
+//   response.header('Access-Control-Allow-Credentials', 'true');
+//   response.header('Access-Control-Allow-Origin', "http://localhost:5173");
+//   response.header('Access-Control-Allow-Methods', 'GET,HEAD,PATCH,DELETE,POST,PUT');
+//   response.header('Access-Control-Allow-Credentials', 'Origin');
+//   next();
+// });
 
 const cors = require("cors");
 app.use(cors({
