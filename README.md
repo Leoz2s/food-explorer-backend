@@ -83,4 +83,6 @@ A variável AUTH_SECRET é usada para armazenar o segredo do token.
 
 A variável PORT é usado para definir a porta em que o projeto deve rodar.
 
+## Arquivo com requisições para o Insomnia
 
+No respositório existe o arquivo "Insomnia_Requests_FoodExplorer.json" que ao ser importado pelo [Insomnia](https://insomnia.rest/download), todas as requisições usadas na aplicação são transferidas para uma coleção no Insomnia, onde ficarão disponíveis para seu uso.
