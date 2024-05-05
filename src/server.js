@@ -16,11 +16,11 @@ app.use(cors({
   source: '/:path*',
   headers: [
     // { key: 'Access-Control-Allow-Credentials', value: 'true' },
-    { key: 'Access-Control-Allow-Origin', value: '*' },
+    // { key: 'Access-Control-Allow-Origin', value: '*' },
     { key: 'Access-Control-Allow-Methods', value: 'GET,HEAD,OPTIONS,PATCH,DELETE,POST,PUT' },
-    { key: 'Access-Control-Allow-Headers', value: `X-CSRF-Token, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version,
-      Authorization, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method,
-      Access-Control-Request-Headers` },
+    // { key: 'Access-Control-Allow-Headers', value: `X-CSRF-Token, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version,
+    //   Authorization, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method,
+    //   Access-Control-Request-Headers` },
   ],
 }));
 
