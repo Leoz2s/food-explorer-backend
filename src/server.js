@@ -9,6 +9,11 @@ app.use(express.json());
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
+app.use((request, response, next) => {
+  response.header('Access-Control-Allow-Credentials', true);
+  next();
+});
+
 const cors = require("cors");
 app.use(cors({
   origin: ["http://localhost:5173", "http://127.0.0.1:5173", "https://food-explorer-frontend-leo.netlify.app"],
