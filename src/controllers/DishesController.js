@@ -33,7 +33,6 @@ class DishesController {
 
   async delete(request, response) {
     const {id} = request.params;
-    const user_id = request.user.id;
 
     const dish = await knex("dishes").where({id}).first();
     if(!dish) {
