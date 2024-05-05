@@ -14,14 +14,14 @@ app.use(cors({
   origin: ["http://localhost:5173", "http://127.0.0.1:5173", "https://food-explorer-frontend-leo.netlify.app"],
   credentials: true,
   source: '/:path*',
-  headers: [
-    // { key: 'Access-Control-Allow-Credentials', value: 'true' },
-    // { key: 'Access-Control-Allow-Origin', value: '*' },
-    { key: 'Access-Control-Allow-Methods', value: 'GET,HEAD,OPTIONS,PATCH,DELETE,POST,PUT' },
-    // { key: 'Access-Control-Allow-Headers', value: `X-CSRF-Token, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version,
-    //   Authorization, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method,
-    //   Access-Control-Request-Headers` },
-  ],
+  // headers: [
+  //   { key: 'Access-Control-Allow-Credentials', value: 'true' },
+  //   { key: 'Access-Control-Allow-Origin', value: '*' },
+  //   { key: 'Access-Control-Allow-Methods', value: 'GET,HEAD,OPTIONS,PATCH,DELETE,POST,PUT' },
+  //   { key: 'Access-Control-Allow-Headers', value: `X-CSRF-Token, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version,
+  //     Authorization, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method,
+  //     Access-Control-Request-Headers` },
+  // ],
 }));
 
 const routes = require("./routes");
