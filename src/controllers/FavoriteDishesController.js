@@ -41,6 +41,17 @@ class FavoriteDishesController {
 
     return response.json();
   };
+
+  async index(request, response) {
+    const user_id = request.user.id;
+
+    const favorites = await knex("favorites").where({user_id});
+    const favoritesDishId = favorites.map(favorite => {return favorite.dish_id});
+
+    const favoritesDishes = await knex("dishes").whereIn('id', favoritesDishId);
+
+    return response.json(favoritesDishes);
+  };
 };
 
 module.exports = FavoriteDishesController;
