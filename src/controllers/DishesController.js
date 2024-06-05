@@ -7,6 +7,11 @@ class DishesController {
     const {name, category, ingredients, price, description} = request.body;
     const user_id = request.user.id;
 
+    const dishWithSameName = await knex("dishes").where({name}).first();
+    if(dishWithSameName) {
+      throw new AppError("Já existe um prato com este nome. Troque o nome do prato para cadastrá-lo.", 400);
+    };
+
     const [dish_id] = await knex("dishes").insert({
       user_id, name, category, price, description
     });
