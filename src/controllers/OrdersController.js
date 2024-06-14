@@ -15,10 +15,11 @@ class OrdersController {
     const userRole = request.user.role;
     const user_id = request.user.id;
 
+    
     let orders;
     if(userRole == "admin") {
       orders = await knex("orders");
-    } else {
+      } else {
       orders = await knex("orders").where({user_id});
     };
 
@@ -26,11 +27,20 @@ class OrdersController {
   };
 
   async update(request, response) {
-    const {order_id, status} = request.body;
+    const {id} = request.params;
+    let {status} = request.body;
 
-    const order = await knex("orders").where({id: order_id}).first();
+    const order = await knex("orders").where({id}).first();
     if(!order) {
-      throw new AppError("O pedido não existe.", 400);
+      throw new AppError("O pedido não existe.", 401);
+    };
+
+    if(status == "Pendente") {
+      status = "pending";
+    }else if(status == "Preparando") {
+      status = "preparing";
+    }else if(status == "Entregue") {
+      status = "delivered";
     };
 
     let updatedOrder;
