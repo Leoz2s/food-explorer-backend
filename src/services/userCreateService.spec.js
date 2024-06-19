@@ -1,16 +1,30 @@
+const UserRepositoryInMemory = require("../repositories/UserRepositoryInMemory");
 const UserCreateService = require("./UserCreateService");
+const AppError = require("../utils/AppError");
 
-it("User should be created.", async () => {
-  const data = {
-    name: "Test user",
-    email: "test@email.com",
-    password: "123456",
-    role: "customer",
-  };
+describe("UserCreateService tests", () => {
+  let userRepositoryInMemory;
+  let userCreateService;
+  let user;
+  beforeEach(() => {
+    userRepositoryInMemory = new UserRepositoryInMemory;
+    userCreateService = new UserCreateService(userRepositoryInMemory);
 
-  const userCreateService = new UserCreateService;
-  const userCreated = await userCreateService.execute(data);
-  console.log(userCreated)
+    user = {
+      name: "Test user",
+      email: "test@email.com",
+      password: "123456",
+      role: "customer",
+    };
+  });
+  
+  it("User created.", async () => {
+    const userCreated = await userCreateService.execute(user);
+    expect(userCreated).toBeDefined();
+  });
 
-  expect(userCreated).toHaveProperty("id");
+  it("Bad request made with e-mail already registered to register new user.", async () => {
+    await userCreateService.execute(user);
+    await expect(userCreateService.execute(user)).rejects.toEqual(new AppError("Este e-mail já está em uso."));
+  });
 });
