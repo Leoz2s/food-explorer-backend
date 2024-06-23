@@ -1,14 +1,14 @@
-const AppError = require("../utils/AppError");
-const knex = require("../database/knex");
+const UsersValidatedRepository = require("../repositories/UsersValidatedRepository");
+const UsersValidatedService = require("../services/UsersValidatedService");
+
+const usersValidatedRepository = new UsersValidatedRepository;
+const usersValidatedService = new UsersValidatedService(usersValidatedRepository);
 
 class UsersValidatedController {
   async index(request, response) {
     const {user} = request;
 
-    const checkUserExists = await knex("users").where({id: user.id});
-    if(checkUserExists.length === 0) {
-      throw new AppError("Não autorizado", 401);
-    };
+    await usersValidatedService.index({user});
 
     return response.status(200).json();
   };

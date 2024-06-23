@@ -1,6 +1,6 @@
-const SessionsRepositoryInMemory = require("../repositories/SessionsRepositoryInMemory");
-const SessionsCreateService = require("./SessionCreateService");
-const AppError = require("../utils/AppError");
+const SessionsRepositoryInMemory = require("../../repositories/repositoriesInMemory/SessionsRepositoryInMemory");
+const SessionsCreateService = require("../SessionCreateService");
+const AppError = require("../../utils/AppError");
 
 describe("Create session tests.", () => {
   let sessionsRepositoryInMemory;

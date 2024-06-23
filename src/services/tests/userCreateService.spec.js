@@ -1,6 +1,6 @@
-const UserRepositoryInMemory = require("../repositories/UserRepositoryInMemory");
-const UserCreateService = require("./UserCreateService");
-const AppError = require("../utils/AppError");
+const UserRepositoryInMemory = require("../../repositories/repositoriesInMemory/UserRepositoryInMemory");
+const UserCreateService = require("../UserCreateService");
+const AppError = require("../../utils/AppError");
 
 describe("UserCreateService tests", () => {
   let userRepositoryInMemory;

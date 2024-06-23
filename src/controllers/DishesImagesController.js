@@ -1,6 +1,8 @@
-const knex = require("../database/knex");
-const AppError = require("../utils/AppError");
-const DiskStorage = require("../providers/DiskStorage");
+const DishesImagesRepository = require("../repositories/DishesImagesRepository");
+const DishesImagesService = require("../services/DishesImagesService");
+
+const dishesImagesRepository = new DishesImagesRepository;
+const dishesImagesService = new DishesImagesService(dishesImagesRepository);
 
 class DishesImagesController {
   async update(request, response) {
@@ -8,20 +10,7 @@ class DishesImagesController {
     const {id} = request.params;
     const imageFile = request.file.filename;
 
-    const diskStorage = new DiskStorage;
-
-    const dish = await knex("dishes").where({id, user_id}).first();
-
-    if(!dish) {
-      throw new AppError("O prato não existe.", 400);
-    }else if(dish.image) {
-      await diskStorage.deleteFile(dish.image);
-    };
-
-    const filename = await diskStorage.saveFile(imageFile);
-    dish.image = filename;
-
-    await knex("dishes").update(dish).where({id, user_id});
+    const dish = await dishesImagesService.update({user_id, id, imageFile});
 
     return response.json(dish);
   };
