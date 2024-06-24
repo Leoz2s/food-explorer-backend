@@ -10,7 +10,11 @@ describe("", () => {
     usersValidatedService = new UsersValidatedService(usersValidatedRepositoryInMemory);
   });
 
-  it("", async () => {
-    
+  it("Bad request: Unauthenticated user.", async () => {
+    await expect(usersValidatedService.index({})).rejects.toEqual(new AppError("Não autorizado", 401));
+  });
+  it("Success to validate authenticated user.", async () => {
+    const user = {id: 1};
+    await expect(usersValidatedService.index({user})).resolves.toBe();
   });
 });

@@ -33,7 +33,7 @@ class OrdersService {
     try {
       updatedOrder = await this.ordersRepository.updateOrderStatus({status, order});
     } catch {
-      throw new AppError("Não foi possível atualizar o pedido.", 400)
+      throw new AppError("Não foi possível atualizar o pedido.", 400);
     };
 
     return updatedOrder;

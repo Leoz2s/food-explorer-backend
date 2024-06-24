@@ -1,4 +1,5 @@
 const knex = require("../database/knex");
+const DiskStorage = require("../providers/DiskStorage");
 
 class DishesRepository {
   // create
@@ -84,6 +85,12 @@ class DishesRepository {
 
   async deleteDishIngredients({id}) {
     return await knex("ingredients").where({dish_id: id}).delete();
+  };
+
+  // diskStorage
+  async deleteImageFile({dish}) {
+    const diskStorage = new DiskStorage;
+    return await diskStorage.deleteFile(dish.image);
   };
 };
 

@@ -1,5 +1,4 @@
 const AppError = require("../utils/AppError");
-const DiskStorage = require("../providers/DiskStorage");
 
 class DishesService {
   constructor(dishesRepository) {
@@ -28,6 +27,9 @@ class DishesService {
 
   async show({id}) {
     const [dish, ingredients] = await this.dishesRepository.fetchDishWithIngredients({id});
+    if(!dish) {
+      throw new AppError("Prato não encontrado.", 400);
+    };
     return [dish, ingredients];
   };
 
@@ -40,8 +42,7 @@ class DishesService {
     await this.dishesRepository.deleteDish({id});
 
     if(dish.image) {
-      const diskStorage = new DiskStorage;
-      await diskStorage.deleteFile(dish.image);
+      await this.dishesRepository.deleteImageFile({dish});
     };
 
     return;
@@ -82,7 +83,7 @@ class DishesService {
     const dish = await this.dishesRepository.fetchDish({id});
 
     if(!dish) {
-      throw new AppError("Prato não encontrado.");
+      throw new AppError("Prato não encontrado.", 400);
     };
     name = name ?? dish[0].name;
     category = category ?? dish[0].category;

@@ -6,8 +6,8 @@ class UsersValidatedService {
   };
 
   async index({user}) {
-    const checkUserExists = await this.usersValidatedRepository.checkUser({user});
-    if(checkUserExists.length === 0) {
+    const checkIfUserExists = await this.usersValidatedRepository.checkUser({user});
+    if(!checkIfUserExists) {
       throw new AppError("Não autorizado", 401);
     };
 
